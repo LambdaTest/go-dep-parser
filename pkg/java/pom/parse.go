@@ -70,7 +70,7 @@ func (e *extendedParser) GetRemoteRepositories() []string {
 }
 
 func (e *extendedParser) GetProperties(groupID, artifactID, version string) map[string]string {
-	art := newArtifact(groupID, artifactID, version, "", nil)
+	art := newArtifact(groupID, artifactID, version, nil, nil)
 	result := e.cache.get(art)
 	if result == nil {
 		return nil
@@ -233,8 +233,8 @@ func (p *parser) parseRoot(root artifact) ([]types.Library, []types.Dependency, 
 		if !art.IsEmpty() {
 			// Override the version
 			uniqArtifacts[art.Name()] = artifact{
-				Version: art.Version,
-				License: art.License,
+				Version:  art.Version,
+				Licenses: art.Licenses,
 			}
 		}
 	}
@@ -244,7 +244,7 @@ func (p *parser) parseRoot(root artifact) ([]types.Library, []types.Dependency, 
 		libs = append(libs, types.Library{
 			Name:    name,
 			Version: art.Version.String(),
-			License: art.License,
+			License: art.JoinLicenses(),
 		})
 	}
 	return libs, deps, nil
@@ -416,7 +416,7 @@ func (p *parser) resolveDepManagement(props map[string]string, depManagement []p
 	// Managed dependencies with a scope of "import" should be processed after other managed dependencies.
 	// cf. https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#importing-dependencies
 	for _, imp := range imports {
-		art := newArtifact(imp.GroupID, imp.ArtifactID, imp.Version, "", props)
+		art := newArtifact(imp.GroupID, imp.ArtifactID, imp.Version, nil, props)
 		result, err := p.resolve(art, nil)
 		if err != nil {
 			continue
@@ -466,7 +466,7 @@ func excludeDep(exclusions map[string]struct{}, art artifact) bool {
 
 func (p *parser) parseParent(currentPath string, parent pomParent) (analysisResult, error) {
 	// Pass nil properties so that variables in <parent> are not evaluated.
-	target := newArtifact(parent.GroupId, parent.ArtifactId, parent.Version, "", nil)
+	target := newArtifact(parent.GroupId, parent.ArtifactId, parent.Version, nil, nil)
 	// if version is property (e.g. ${revision}) - we still need to parse this pom
 	if target.IsEmpty() && !isProperty(parent.Version) {
 		return analysisResult{}, nil
