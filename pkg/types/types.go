@@ -4,6 +4,54 @@ import (
 	dio "github.com/aquasecurity/go-dep-parser/pkg/io"
 )
 
+type (
+	// TargetType represents the type of target
+	TargetType string
+
+	// LangType is an alias of TargetType for programming languages
+	LangType = TargetType
+)
+
+const (
+	Bundler       LangType = "bundler"
+	GemSpec       LangType = "gemspec"
+	Cargo         LangType = "cargo"
+	Composer      LangType = "composer"
+	Npm           LangType = "npm"
+	NuGet         LangType = "nuget"
+	DotNetCore    LangType = "dotnet-core"
+	PackagesProps LangType = "packages-props"
+	Pip           LangType = "pip"
+	Pipenv        LangType = "pipenv"
+	Poetry        LangType = "poetry"
+	CondaPkg      LangType = "conda-pkg"
+	CondaEnv      LangType = "conda-environment"
+	PythonPkg     LangType = "python-pkg"
+	NodePkg       LangType = "node-pkg"
+	Yarn          LangType = "yarn"
+	Pnpm          LangType = "pnpm"
+	Jar           LangType = "jar"
+	Pom           LangType = "pom"
+	Gradle        LangType = "gradle"
+	GoBinary      LangType = "gobinary"
+	GoModule      LangType = "gomod"
+	JavaScript    LangType = "javascript"
+	RustBinary    LangType = "rustbinary"
+	Conan         LangType = "conan"
+	Cocoapods     LangType = "cocoapods"
+	Swift         LangType = "swift"
+	Pub           LangType = "pub"
+	Hex           LangType = "hex"
+	Bitnami       LangType = "bitnami"
+
+	K8sUpstream LangType = "kubernetes"
+	EKS         LangType = "eks" // Amazon Elastic Kubernetes Service
+	GKE         LangType = "gke" // Google Kubernetes Engine
+	AKS         LangType = "aks" // Azure Kubernetes Service
+	RKE         LangType = "rke" // Rancher Kubernetes Engine
+	OCP         LangType = "ocp" // Red Hat OpenShift Container Platform
+)
+
 type Library struct {
 	ID                 string `json:",omitempty"`
 	Name               string
